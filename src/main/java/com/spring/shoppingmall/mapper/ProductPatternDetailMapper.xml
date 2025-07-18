@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.shoppingmall.dao.ProductPatternDetailDao">
+
+    <!-- 패턴 상세 등록 -->
+    <insert id="insertProductPatternDetail" parameterType="ProductPatternDetailVo">
+        INSERT INTO PRODUCTPATTERNDETAIL (
+            PTDETAILIDX, PRDGRIDX, PRDPTIDX, PTDETAILTYPE,
+            PTDETAILIMG, PTDETAILDESC, PTDETAILMV, PRDIDX, PTDETAILVIEW
+        ) VALUES (
+                     #{ptdetailidx}, #{prdgridx}, #{prdptidx}, #{ptdetailtype},
+                     #{ptdetailimg}, #{ptdetaildesc}, #{ptdetailmv}, #{prdidx}, #{ptdetailview}
+                 )
+    </insert>
+
+    <!-- 패턴 상세 수정 -->
+    <update id="updateProductPatternDetail" parameterType="ProductPatternDetailVo">
+        UPDATE PRODUCTPATTERNDETAIL SET
+                                        PRDGRIDX = #{prdgridx},
+                                        PRDPTIDX = #{prdptidx},
+                                        PTDETAILTYPE = #{ptdetailtype},
+                                        PTDETAILIMG = #{ptdetailimg},
+                                        PTDETAILDESC = #{ptdetaildesc},
+                                        PTDETAILMV = #{ptdetailmv},
+                                        PRDIDX = #{prdidx},
+                                        PTDETAILVIEW = #{ptdetailview}
+        WHERE PTDETAILIDX = #{ptdetailidx}
+    </update>
+
+    <!-- 패턴 상세 삭제 -->
+    <delete id="deleteProductPatternDetail" parameterType="long">
+        DELETE FROM PRODUCTPATTERNDETAIL
+        WHERE PTDETAILIDX = #{ptdetailidx}
+    </delete>
+
+    <!-- 패턴 상세 단건 조회 -->
+    <select id="selectProductPatternDetail" parameterType="long" resultType="ProductPatternDetailVo">
+        SELECT PTDETAILIDX, PRDGRIDX, PRDPTIDX, PTDETAILTYPE,
+               PTDETAILIMG, PTDETAILDESC, PTDETAILMV, PRDIDX, PTDETAILVIEW
+        FROM PRODUCTPATTERNDETAIL
+        WHERE PTDETAILIDX = #{ptdetailidx}
+    </select>
+
+    <!-- 패턴별 상세 목록 조회 -->
+    <select id="selectProductPatternDetailListByPatternId" parameterType="long" resultType="ProductPatternDetailVo">
+        SELECT PTDETAILIDX, PRDGRIDX, PRDPTIDX, PTDETAILTYPE,
+               PTDETAILIMG, PTDETAILDESC, PTDETAILMV, PRDIDX, PTDETAILVIEW
+        FROM PRODUCTPATTERNDETAIL
+        WHERE PRDPTIDX = #{prdptidx}
+        ORDER BY PTDETAILIDX ASC
+    </select>
+
+    <!-- 기회전별 패턴 상세 목록 조회 -->
+    <select id="selectProductPatternDetailListByGroupId" parameterType="long" resultType="ProductPatternDetailVo">
+        SELECT PTDETAILIDX, PRDGRIDX, PRDPTIDX, PTDETAILTYPE,
+               PTDETAILIMG, PTDETAILDESC, PTDETAILMV, PRDIDX, PTDETAILVIEW
+        FROM PRODUCTPATTERNDETAIL
+        WHERE PRDGRIDX = #{prdgridx}
+        ORDER BY PRDPTIDX ASC, PTDETAILIDX ASC
+    </select>
+
+    <!-- 패턴별 노출중인 상세 목록 조회 -->
+    <select id="selectActiveProductPatternDetailListByPatternId" parameterType="long" resultType="ProductPatternDetailVo">
+        SELECT PTDETAILIDX, PRDGRIDX, PRDPTIDX, PTDETAILTYPE,
+               PTDETAILIMG, PTDETAILDESC, PTDETAILMV, PRDIDX, PTDETAILVIEW
+        FROM PRODUCTPATTERNDETAIL
+        WHERE PRDPTIDX = #{prdptidx} AND PTDETAILVIEW = 'Y'
+        ORDER BY PTDETAILIDX ASC
+    </select>
+
+    <!-- 패턴별 상세 개수 조회 -->
+    <select id="selectProductPatternDetailCountByPatternId" parameterType="long" resultType="int">
+        SELECT COUNT(*)
+        FROM PRODUCTPATTERNDETAIL
+        WHERE PRDPTIDX = #{prdptidx}
+    </select>
+
+    <!-- 다음 시퀀스 값 조회 -->
+    <select id="selectNextSequence" resultType="long">
+        SELECT PRODUCTPATTERNDETAIL_SEQ.NEXTVAL FROM DUAL
+    </select>
+
+</mapper>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.shoppingmall.dao.ProductGroupInfoDao">
+
+    <!-- 기회전 등록 -->
+    <insert id="insertProductGroupInfo" parameterType="ProductGroupInfoVo">
+        INSERT INTO PRODUCTGROUPINFO (
+            PRDGRIDX, PRDGRBR, PRDGRTM, PRDGRNAME,
+            PRDGRIMG, PRDGRVIEW, PRDGRPRRIOD, PRDGRSALE
+        ) VALUES (
+                     #{prdgridx}, #{prdgrbr}, #{prdgrtm}, #{prdgrname},
+                     #{prdgrimg}, #{prdgrview}, #{prdgrprriod}, #{prdgrsale}
+                 )
+    </insert>
+
+    <!-- 기회전 수정 -->
+    <update id="updateProductGroupInfo" parameterType="ProductGroupInfoVo">
+        UPDATE PRODUCTGROUPINFO SET
+                                    PRDGRBR = #{prdgrbr},
+                                    PRDGRTM = #{prdgrtm},
+                                    PRDGRNAME = #{prdgrname},
+                                    PRDGRIMG = #{prdgrimg},
+                                    PRDGRVIEW = #{prdgrview},
+                                    PRDGRPRRIOD = #{prdgrprriod},
+                                    PRDGRSALE = #{prdgrsale}
+        WHERE PRDGRIDX = #{prdgridx}
+    </update>
+
+    <!-- 기회전 삭제 -->
+    <delete id="deleteProductGroupInfo" parameterType="long">
+        DELETE FROM PRODUCTGROUPINFO
+        WHERE PRDGRIDX = #{prdgridx}
+    </delete>
+
+    <!-- 기회전 단건 조회 -->
+    <select id="selectProductGroupInfo" parameterType="long" resultType="ProductGroupInfoVo">
+        SELECT PRDGRIDX, PRDGRBR, PRDGRTM, PRDGRNAME,
+               PRDGRIMG, PRDGRVIEW, PRDGRPRRIOD, PRDGRSALE
+        FROM PRODUCTGROUPINFO
+        WHERE PRDGRIDX = #{prdgridx}
+    </select>
+
+    <!-- 기회전 목록 조회 (전체) -->
+    <select id="selectProductGroupInfoList" resultType="ProductGroupInfoVo">
+        SELECT PRDGRIDX, PRDGRBR, PRDGRTM, PRDGRNAME,
+               PRDGRIMG, PRDGRVIEW, PRDGRPRRIOD, PRDGRSALE
+        FROM PRODUCTGROUPINFO
+        ORDER BY PRDGRIDX DESC
+    </select>
+
+    <!-- 기회전 목록 조회 (노출 중인 것만) -->
+    <select id="selectActiveProductGroupInfoList" resultType="ProductGroupInfoVo">
+        SELECT PRDGRIDX, PRDGRBR, PRDGRTM, PRDGRNAME,
+               PRDGRIMG, PRDGRVIEW, PRDGRPRRIOD, PRDGRSALE
+        FROM PRODUCTGROUPINFO
+        WHERE PRDGRVIEW = 'Y'
+        ORDER BY PRDGRIDX DESC
+    </select>
+
+    <!-- 기회전 총 개수 조회 -->
+    <select id="selectProductGroupInfoCount" resultType="int">
+        SELECT COUNT(*) FROM PRODUCTGROUPINFO
+    </select>
+
+    <!-- 다음 시퀀스 값 조회 -->
+    <select id="selectNextSequence" resultType="long">
+        SELECT PRODUCTGROUPINFO_SEQ.NEXTVAL FROM DUAL
+    </select>
+
+</mapper>

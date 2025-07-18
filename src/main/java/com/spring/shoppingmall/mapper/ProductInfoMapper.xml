@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.shoppingmall.dao.ProductInfoDao">
+
+    <!-- 상품 등록 -->
+    <insert id="insertProductInfo" parameterType="ProductInfoVo" useGeneratedKeys="true" keyProperty="prdidx">
+        <selectKey keyProperty="prdidx" resultType="long" order="BEFORE">
+            SELECT NVL(MAX(PRDIDX), 0) + 1 FROM PRODUCTINFO
+        </selectKey>
+        INSERT INTO PRODUCTINFO (
+        PRDIDX, PRDBR, PRDCTGR, PRDNAME, PRDPRC, PRDVIEW, PRDIMG
+        ) VALUES (
+        #{prdidx}, #{prdbr}, #{prdctgr}, #{prdname}, #{prdprc}, #{prdview}, #{prdimg}
+        )
+    </insert>
+
+    <!-- 상품 수정 -->
+    <update id="updateProductInfo" parameterType="ProductInfoVo">
+        UPDATE PRODUCTINFO SET
+                               PRDBR = #{prdbr},
+                               PRDCTGR = #{prdctgr},
+                               PRDNAME = #{prdname},
+                               PRDPRC = #{prdprc},
+                               PRDVIEW = #{prdview},
+                               PRDIMG = #{prdimg}
+        WHERE PRDIDX = #{prdidx}
+    </update>
+
+    <!-- 상품 삭제 -->
+    <delete id="deleteProductInfo" parameterType="long">
+        DELETE FROM PRODUCTINFO
+        WHERE PRDIDX = #{prdidx}
+    </delete>
+
+    <!-- 상품 단건 조회 -->
+    <select id="selectProductInfo" parameterType="long" resultType="ProductInfoVo">
+        SELECT PRDIDX, PRDBR, PRDCTGR, PRDNAME, PRDPRC, PRDVIEW, PRDIMG
+        FROM PRODUCTINFO
+        WHERE PRDIDX = #{prdidx}
+    </select>
+
+    <!-- 상품 목록 조회 (전체) -->
+    <select id="selectProductInfoList" resultType="ProductInfoVo">
+        SELECT PRDIDX, PRDBR, PRDCTGR, PRDNAME, PRDPRC, PRDVIEW, PRDIMG
+        FROM PRODUCTINFO
+        ORDER BY PRDIDX DESC
+    </select>
+
+    <!-- 상품 목록 조회 (노출 중인 것만) -->
+    <select id="selectActiveProductInfoList" resultType="ProductInfoVo">
+        SELECT PRDIDX, PRDBR, PRDCTGR, PRDNAME, PRDPRC, PRDVIEW, PRDIMG
+        FROM PRODUCTINFO
+        WHERE PRDVIEW = 'Y'
+        ORDER BY PRDIDX DESC
+    </select>
+
+    <!-- 카테고리별 상품 목록 조회 -->
+    <select id="selectProductInfoListByCategory" parameterType="string" resultType="ProductInfoVo">
+        SELECT PRDIDX, PRDBR, PRDCTGR, PRDNAME, PRDPRC, PRDVIEW, PRDIMG
+        FROM PRODUCTINFO
+        WHERE PRDCTGR = #{prdctgr}
+        ORDER BY PRDNAME ASC
+    </select>
+
+    <!-- 브랜드별 상품 목록 조회 -->
+    <select id="selectProductInfoListByBrand" parameterType="string" resultType="ProductInfoVo">
+        SELECT PRDIDX, PRDBR, PRDCTGR, PRDNAME, PRDPRC, PRDVIEW, PRDIMG
+        FROM PRODUCTINFO
+        WHERE PRDBR = #{prdbr}
+        ORDER BY PRDNAME ASC
+    </select>
+
+    <!-- 상품명으로 검색 -->
+    <select id="selectProductInfoListByName" parameterType="string" resultType="ProductInfoVo">
+        SELECT PRDIDX, PRDBR, PRDCTGR, PRDNAME, PRDPRC, PRDVIEW, PRDIMG
+        FROM PRODUCTINFO
+        WHERE PRDNAME LIKE '%' || #{prdname} || '%'
+        ORDER BY PRDNAME ASC
+    </select>
+
+    <!-- 상품 총 개수 조회 -->
+    <select id="selectProductInfoCount" resultType="int">
+        SELECT COUNT(*) FROM PRODUCTINFO
+    </select>
+
+    <!-- 카테고리별 상품 개수 조회 -->
+    <select id="selectProductInfoCountByCategory" parameterType="string" resultType="int">
+        SELECT COUNT(*)
+        FROM PRODUCTINFO
+        WHERE PRDCTGR = #{prdctgr}
+    </select>
+
+</mapper>
